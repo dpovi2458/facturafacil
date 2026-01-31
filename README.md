@@ -1,216 +1,209 @@
-# FacturaFácil.pe 🧾
+# FacturaFácil - Integración con Appwrite
 
-Sistema de facturación electrónica simple para MYPES peruanas. Emite boletas y facturas electrónicas cumpliendo con SUNAT.
+Sistema de facturación electrónica para Perú, ahora con Appwrite como base de datos.
 
-![FacturaFácil](https://img.shields.io/badge/version-1.0.0-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
+## 🚀 Configuración Rápida
 
-## 🎯 Problema que Resuelve
+### 1. Crear proyecto en Appwrite
 
-Los negocios pequeños formales (bodegas, restaurantes, talleres) necesitan emitir boletas y facturas electrónicas porque SUNAT lo exige, pero:
-- No saben cómo hacerlo técnicamente
-- El sistema de SUNAT es complicado
-- Pagan S/100-200/mes a contadores por esto
+1. Ve a [Appwrite Cloud](https://cloud.appwrite.io) o tu instancia self-hosted
+2. Crea un nuevo proyecto
+3. Anota el **Project ID**
+4. Ve a **Settings > API Keys** y crea una nueva API Key con estos permisos:
+   - `databases.read`, `databases.write`
+   - `collections.read`, `collections.write`
+   - `documents.read`, `documents.write`
+   - `attributes.read`, `attributes.write`
+   - `indexes.read`, `indexes.write`
 
-## 💡 Solución
+### 2. Configurar el Servidor
 
-Una web app simple y económica para emitir boletas y facturas electrónicas:
-- ✅ Interfaz fácil de usar
-- ✅ 100% compatible con SUNAT
-- ✅ Desde S/29/mes
-- ✅ Sin conocimientos técnicos requeridos
-
-## 🚀 Características
-
-- **Emisión de Comprobantes**: Boletas y facturas electrónicas válidas ante SUNAT
-- **Gestión de Clientes**: Registra y busca clientes por DNI/RUC
-- **Catálogo de Productos**: Mantén un catálogo para facturar más rápido
-- **Dashboard**: Visualiza ventas diarias, mensuales y anuales
-- **Generación de PDF**: Descarga comprobantes en PDF
-- **Reportes**: Estadísticas de ventas y uso
-
-## 📋 Planes de Precios
-
-| Plan | Precio | Comprobantes/mes |
-|------|--------|------------------|
-| Prueba | Gratis (7 días) | 10 |
-| Básico | S/29 | 50 |
-| Negocio | S/59 | Ilimitados |
-
-## 🛠 Stack Tecnológico
-
-### Backend
-- Node.js + Express
-- SQLite (better-sqlite3)
-- JWT para autenticación
-- PDFKit para generación de PDFs
-
-### Frontend
-- React 18 + TypeScript
-- Vite
-- Tailwind CSS
-- React Router
-- React Hook Form
-- Recharts
-- Zustand
-
-## 📁 Estructura del Proyecto
-
-```
-facturafacil/
-├── client/                 # Frontend React
-│   ├── src/
-│   │   ├── components/     # Componentes reutilizables
-│   │   ├── pages/          # Páginas de la aplicación
-│   │   ├── services/       # API calls
-│   │   ├── store/          # Estado global (Zustand)
-│   │   └── types/          # Tipos TypeScript
-│   └── public/
-├── server/                 # Backend Express
-│   ├── src/
-│   │   ├── database/       # Inicialización SQLite
-│   │   ├── middleware/     # Auth middleware
-│   │   ├── routes/         # API routes
-│   │   └── services/       # PDF, SUNAT services
-│   ├── data/               # Base de datos SQLite
-│   └── pdfs/               # PDFs generados
-└── package.json
-```
-
-## 🔧 Instalación
-
-### Requisitos
-- Node.js 18+
-- npm o yarn
-
-### Pasos
-
-1. **Clonar el repositorio**
 ```bash
-cd facturafacil
+cd server
+
+# Copiar archivo de configuración
+cp .env.example .env
+
+# Editar .env con tus credenciales de Appwrite
+nano .env
 ```
 
-2. **Instalar dependencias**
-```bash
-npm run install:all
+Configurar estas variables:
+```env
+APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
+APPWRITE_PROJECT_ID=tu_project_id
+APPWRITE_API_KEY=tu_api_key
+APPWRITE_DATABASE_ID=facturafacil
+JWT_SECRET=tu_secreto_jwt
 ```
 
-3. **Configurar variables de entorno**
+### 3. Crear Base de Datos y Colecciones
+
 ```bash
-# El archivo server/.env ya está configurado para desarrollo
-# Para producción, actualiza JWT_SECRET
+cd server
+npm install
+npm run setup:appwrite
 ```
 
-4. **Iniciar en modo desarrollo**
+Este comando creará automáticamente:
+- Base de datos `facturafacil`
+- Colecciones: users, businesses, clients, products, documents, document_items, series
+- Índices necesarios
+
+### 4. Iniciar el Servidor
+
 ```bash
+# Con Appwrite (por defecto)
+npm run dev
+
+# O con SQLite (versión anterior)
+npm run dev:sqlite
+```
+
+### 5. Configurar el Cliente
+
+```bash
+cd client
+
+# Copiar archivo de configuración
+cp .env.example .env
+
+# Editar .env (opcional si usas el backend)
+nano .env
+```
+
+```bash
+npm install
 npm run dev
 ```
 
-Esto iniciará:
-- Backend en `http://localhost:3001`
-- Frontend en `http://localhost:5173`
+## 📁 Estructura de Archivos
 
-## 📖 Uso
+### Servidor (con Appwrite)
 
-### 1. Registro
-- Ingresa a `http://localhost:5173`
-- Crea una cuenta con tu RUC y datos del negocio
-- Obtienes 7 días de prueba gratis con 10 comprobantes
-
-### 2. Configuración Inicial
-- Agrega tus productos/servicios frecuentes
-- Registra tus clientes habituales
-
-### 3. Emitir Comprobantes
-- Click en "Nuevo Comprobante"
-- Selecciona Boleta o Factura
-- Agrega items y cliente
-- Click en "Emitir"
-- ¡Listo! Descarga el PDF
-
-## 🔌 API Endpoints
-
-### Autenticación
 ```
-POST /api/auth/register   - Registro de usuario
-POST /api/auth/login      - Inicio de sesión
-GET  /api/auth/me         - Usuario actual
+server/src/
+├── config/
+│   └── appwrite.js          # Configuración del cliente Appwrite
+├── database/
+│   ├── appwrite.js          # Servicios de base de datos Appwrite
+│   └── init.js              # Base de datos SQLite (legacy)
+├── middleware/
+│   ├── auth.appwrite.js     # Middleware con Appwrite
+│   └── auth.js              # Middleware con SQLite (legacy)
+├── routes/
+│   ├── auth.appwrite.js     # Rutas de autenticación
+│   ├── clients.appwrite.js  # Rutas de clientes
+│   ├── products.appwrite.js # Rutas de productos
+│   ├── documents.appwrite.js # Rutas de documentos
+│   ├── dashboard.appwrite.js # Rutas del dashboard
+│   └── business.appwrite.js  # Rutas del negocio
+├── index.appwrite.js        # Entry point con Appwrite
+├── index.js                 # Entry point con SQLite (legacy)
+└── setup-appwrite.js        # Script de configuración
 ```
 
-### Clientes
-```
-GET    /api/clients       - Listar clientes
-POST   /api/clients       - Crear cliente
-PUT    /api/clients/:id   - Actualizar cliente
-DELETE /api/clients/:id   - Eliminar cliente
-```
+### Cliente
 
-### Productos
 ```
-GET    /api/products      - Listar productos
-POST   /api/products      - Crear producto
-PUT    /api/products/:id  - Actualizar producto
-DELETE /api/products/:id  - Eliminar producto
+client/src/
+├── config/
+│   └── appwrite.ts          # Configuración del cliente Appwrite
+├── services/
+│   ├── api.ts               # API usando backend Express
+│   └── appwrite.ts          # Servicios Appwrite directos (opcional)
 ```
 
-### Documentos
-```
-GET    /api/documents           - Listar documentos
-GET    /api/documents/:id       - Obtener documento
-POST   /api/documents           - Crear documento
-GET    /api/documents/:id/pdf   - Descargar PDF
-POST   /api/documents/:id/anular - Anular documento
-```
+## 🔧 Scripts Disponibles
 
-### Dashboard
-```
-GET /api/dashboard/stats  - Estadísticas
+### Servidor
+
+```bash
+npm run dev              # Desarrollo con Appwrite
+npm run dev:sqlite       # Desarrollo con SQLite
+npm run start            # Producción con Appwrite
+npm run start:sqlite     # Producción con SQLite
+npm run setup:appwrite   # Configurar base de datos Appwrite
 ```
 
-## 🔐 Seguridad
+### Cliente
 
-- Contraseñas hasheadas con bcrypt
-- JWT con expiración de 7 días
-- Validación de datos con express-validator
-- Protección de rutas en frontend y backend
+```bash
+npm run dev      # Servidor de desarrollo
+npm run build    # Build para producción
+npm run preview  # Preview del build
+```
 
-## 📊 Base de Datos
+## 🗃️ Colecciones de Appwrite
 
-### Tablas
-- `users` - Usuarios del sistema
-- `businesses` - Datos de negocios
-- `clients` - Clientes de cada negocio
-- `products` - Productos/servicios
-- `documents` - Boletas y facturas
-- `document_items` - Items de cada documento
-- `series` - Control de series (B001, F001, etc.)
+### users
+- `email` (string, único)
+- `password` (string, hasheado)
+- `created_at`, `updated_at` (datetime)
 
-## 🌟 Próximas Mejoras
+### businesses
+- `user_id` (string, único)
+- `ruc` (string, único, 11 caracteres)
+- `razon_social`, `nombre_comercial`, `direccion` (string)
+- `ubigeo`, `departamento`, `provincia`, `distrito` (string)
+- `telefono`, `email`, `logo` (string)
+- `plan` (string: trial, basico, negocio)
+- `documents_this_month` (integer)
 
-- [ ] Integración real con API de SUNAT
-- [ ] Consulta de RUC/DNI automática
-- [ ] Notas de crédito y débito
-- [ ] Reportes exportables a Excel
-- [ ] Notificaciones por email
-- [ ] App móvil
+### clients
+- `business_id` (string)
+- `tipo_documento` (string: DNI, RUC, CE, PASAPORTE)
+- `numero_documento`, `nombre` (string)
+- `direccion`, `email`, `telefono` (string, opcional)
 
-## 🤝 Contribuir
+### products
+- `business_id` (string)
+- `codigo`, `descripcion` (string)
+- `unidad_medida` (string, default: NIU)
+- `precio` (float)
+- `tipo` (string: producto, servicio)
+- `igv_incluido`, `activo` (boolean)
 
-1. Fork el proyecto
-2. Crea una rama (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit cambios (`git commit -am 'Agrega nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Crea un Pull Request
+### documents
+- `business_id`, `client_id` (string)
+- `tipo` (string: boleta, factura)
+- `serie`, `numero` (string, integer)
+- `fecha_emision`, `fecha_vencimiento` (string)
+- `moneda` (string, default: PEN)
+- `subtotal`, `igv`, `total` (float)
+- `estado` (string: emitido, aceptado, rechazado, anulado)
+- `sunat_respuesta`, `sunat_codigo`, `hash_cpe` (string)
+- `pdf_path`, `xml_path`, `observaciones` (string)
 
-## 📄 Licencia
+### document_items
+- `document_id`, `product_id` (string)
+- `cantidad`, `precio_unitario`, `valor_venta`, `igv`, `total` (float)
+- `unidad_medida`, `descripcion` (string)
 
-MIT License - ver [LICENSE](LICENSE)
+### series
+- `business_id` (string)
+- `tipo` (string: boleta, factura)
+- `serie` (string: B001, F001, etc.)
+- `ultimo_numero` (integer)
+- `activo` (boolean)
 
-## 📞 Soporte
+## 🔄 Migración desde SQLite
 
-- Email: soporte@facturafacil.pe
-- WhatsApp: +51 999 999 999
+Si tienes datos en SQLite que quieres migrar a Appwrite:
 
----
+1. Exporta los datos de SQLite
+2. Ejecuta `npm run setup:appwrite` para crear las colecciones
+3. Importa los datos usando la API de Appwrite o scripts personalizados
 
-Hecho con ❤️ para las MYPES peruanas
+## 🛡️ Seguridad
+
+- Los passwords se hashean con bcrypt antes de guardar
+- Las API Keys de Appwrite solo deben usarse en el servidor
+- El cliente puede usar Appwrite directamente solo para operaciones permitidas
+- JWT se usa para autenticación entre cliente y servidor Express
+
+## 📝 Notas
+
+- El servidor Express actúa como middleware entre el cliente y Appwrite
+- Esto permite lógica de negocio adicional (validaciones, generación de PDFs, etc.)
+- Para producción, considera usar Appwrite Functions para lógica serverless

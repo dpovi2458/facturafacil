@@ -6,12 +6,16 @@ import { useAuthStore } from './store/authStore';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import Dashboard from './pages/Dashboard';
 import Documents from './pages/Documents';
 import NewDocument from './pages/NewDocument';
 import Clients from './pages/Clients';
 import Products from './pages/Products';
 import Settings from './pages/Settings';
+import Finances from './pages/Finances';
+import Payments from './pages/Payments';
 
 // Layout
 import AppLayout from './components/layout/AppLayout';
@@ -63,6 +67,8 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* Protected routes */}
         <Route path="/app" element={
@@ -76,6 +82,8 @@ function App() {
           <Route path="documents/new" element={<NewDocument />} />
           <Route path="clients" element={<Clients />} />
           <Route path="products" element={<Products />} />
+          <Route path="finances" element={<Finances />} />
+          <Route path="payments" element={<Payments />} />
           <Route path="settings" element={<Settings />} />
         </Route>
 

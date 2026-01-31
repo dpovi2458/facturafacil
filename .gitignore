@@ -1,5 +1,6 @@
 node_modules/
 dist/
+.env
 .env.local
 .env.production
 *.log
@@ -7,3 +8,6 @@ dist/
 Thumbs.db
 server/data/
 server/pdfs/
+server/.env
+client/.env.local
+.vercel

@@ -1,0 +1,30 @@
+# Render.com - Configuración del Backend
+# https://render.com
+
+services:
+  - type: web
+    name: facturafacil-api
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: cd server && npm install
+    startCommand: cd server && node src/index.appwrite.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+      - key: JWT_SECRET
+        sync: false
+      - key: APPWRITE_ENDPOINT
+        value: https://sfo.cloud.appwrite.io/v1
+      - key: APPWRITE_PROJECT_ID
+        value: facil
+      - key: APPWRITE_DATABASE_ID
+        value: facturafacil
+      - key: APPWRITE_API_KEY
+        sync: false
+      - key: ADMIN_LICENSE_PASSWORD
+        sync: false
+      - key: DO_GENAI_API_KEY
+        sync: false

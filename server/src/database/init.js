@@ -207,4 +207,8 @@ async function initDatabase() {
   console.log('✅ Base de datos inicializada correctamente');
 }
 
-module.exports = { db: dbWrapper, initDatabase, getDatabase };
+function getDb() {
+  return dbWrapper;
+}
+
+module.exports = { db: dbWrapper, initDatabase, getDatabase, getDb };

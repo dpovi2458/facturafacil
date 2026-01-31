@@ -9,15 +9,19 @@ import {
   PlusCircleIcon,
   Bars3Icon,
   XMarkIcon,
-  ArrowRightOnRectangleIcon
+  ArrowRightOnRectangleIcon,
+  BanknotesIcon,
+  CreditCardIcon
 } from '@heroicons/react/24/outline';
 import { useAuthStore } from '../../store/authStore';
 
 const navigation = [
   { name: 'Dashboard', href: '/app/dashboard', icon: HomeIcon },
   { name: 'Comprobantes', href: '/app/documents', icon: DocumentTextIcon },
+  { name: 'Finanzas', href: '/app/finances', icon: BanknotesIcon },
   { name: 'Clientes', href: '/app/clients', icon: UsersIcon },
   { name: 'Productos', href: '/app/products', icon: CubeIcon },
+  { name: 'Pagos', href: '/app/payments', icon: CreditCardIcon },
   { name: 'Configuración', href: '/app/settings', icon: Cog6ToothIcon },
 ];
 

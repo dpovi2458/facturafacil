@@ -4,9 +4,12 @@
   "description": "Backend API para FacturaFácil.pe",
   "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon src/index.js",
-    "start": "node src/index.js",
-    "seed": "node src/seed.js"
+    "dev": "nodemon src/index.appwrite.js",
+    "dev:sqlite": "nodemon src/index.js",
+    "start": "node src/index.appwrite.js",
+    "start:sqlite": "node src/index.js",
+    "seed": "node src/seed.js",
+    "setup:appwrite": "node src/setup-appwrite.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -15,6 +18,7 @@
     "express": "^4.18.2",
     "express-validator": "^7.0.1",
     "jsonwebtoken": "^9.0.2",
+    "node-appwrite": "^21.1.0",
     "pdfkit": "^0.14.0",
     "sql.js": "^1.10.0",
     "uuid": "^9.0.1"
