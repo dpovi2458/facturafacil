@@ -62,7 +62,7 @@ export default function NewDocument() {
   
   const clientSearchRef = useRef<HTMLDivElement>(null);
 
-  const { register, handleSubmit, control, watch, setValue, formState: { errors } } = useForm<DocumentForm>({
+  const { register, handleSubmit, control, watch, setValue } = useForm<DocumentForm>({
     defaultValues: {
       tipo: 'boleta',
       fechaEmision: new Date().toISOString().split('T')[0],

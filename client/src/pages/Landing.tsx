@@ -2,10 +2,8 @@ import { Link } from 'react-router-dom';
 import { 
   DocumentTextIcon, 
   CheckCircleIcon, 
-  CurrencyDollarIcon,
   ShieldCheckIcon,
   ChartBarIcon,
-  DevicePhoneMobileIcon,
   ArrowRightIcon,
   StarIcon,
   SparklesIcon,
